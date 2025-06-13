@@ -9,8 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navigation from '@/components/Navigation';
 import { useToast } from '@/hooks/use-toast';
 import BreathingGame from '@/components/games/BreathingGame';
-import MemoryGame from '@/components/games/MemoryGame';
-import ColorTherapyGame from '@/components/games/ColorTherapyGame';
+import SuperBetterGame from '@/components/games/SuperBetterGame';
+import ConversationCraftGame from '@/components/games/ConversationCraftGame';
 import ZenDrawing from '@/components/games/ZenDrawing';
 
 const Relaxation = () => {
@@ -19,6 +19,7 @@ const Relaxation = () => {
   const [totalTime, setTotalTime] = useState(300); // 5 minutos por defecto
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState([50]);
+  const [expandedGame, setExpandedGame] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,6 +59,10 @@ const Relaxation = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const toggleGameExpansion = (gameId: string) => {
+    setExpandedGame(expandedGame === gameId ? null : gameId);
   };
 
   const exercises = [
@@ -291,8 +296,14 @@ const Relaxation = () => {
           <TabsContent value="games" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <BreathingGame />
-              <MemoryGame />
-              <ColorTherapyGame />
+              <SuperBetterGame 
+                isExpanded={expandedGame === 'superbetter'} 
+                onToggleExpand={() => toggleGameExpansion('superbetter')} 
+              />
+              <ConversationCraftGame 
+                isExpanded={expandedGame === 'conversation'} 
+                onToggleExpand={() => toggleGameExpansion('conversation')} 
+              />
               <ZenDrawing />
             </div>
           </TabsContent>
