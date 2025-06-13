@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,6 +65,30 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Colores personalizados para bienestar
+				wellness: {
+					blue: {
+						50: '#eff6ff',
+						100: '#dbeafe',
+						500: '#3b82f6',
+						600: '#2563eb',
+						700: '#1d4ed8'
+					},
+					purple: {
+						50: '#faf5ff',
+						100: '#f3e8ff',
+						500: '#8b5cf6',
+						600: '#7c3aed',
+						700: '#6d28d9'
+					},
+					green: {
+						50: '#ecfdf5',
+						100: '#d1fae5',
+						500: '#10b981',
+						600: '#059669',
+						700: '#047857'
+					}
 				}
 			},
 			borderRadius: {
@@ -84,11 +112,31 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'breathe': {
+					'0%, 100%': {
+						transform: 'scale(1)'
+					},
+					'50%': {
+						transform: 'scale(1.1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'breathe': 'breathe 3s ease-in-out infinite'
 			}
 		}
 	},
