@@ -2,9 +2,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Paintbrush, RotateCcw, Download } from 'lucide-react';
+import { Paintbrush, RotateCcw, Download, X } from 'lucide-react';
 
-const ZenDrawing = () => {
+const ZenDrawing = ({ isExpanded, onToggleExpand }: { isExpanded?: boolean, onToggleExpand?: () => void }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#4A90E2');
@@ -27,7 +27,7 @@ const ZenDrawing = () => {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
     }
-  }, []);
+  }, [isExpanded]);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDrawing(true);
@@ -90,12 +90,38 @@ const ZenDrawing = () => {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-green-50 to-teal-100 border-green-200">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-green-800">
-          <Paintbrush className="h-5 w-5" />
-          Dibujo Zen
-        </CardTitle>
+    <Card className={`bg-gradient-to-br from-green-50 to-teal-100 border-green-200 transition-all duration-300 ${
+      isExpanded ? 'fixed inset-4 z-50 overflow-auto' : ''
+    }`}>
+      <CardHeader className="relative">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-green-800">
+            <Paintbrush className="h-5 w-5" />
+            Dibujo Zen
+          </CardTitle>
+          {onToggleExpand && (
+            <>
+              {isExpanded ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onToggleExpand}
+                  className="absolute right-2 top-2"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onToggleExpand}
+                >
+                  Expandir
+                </Button>
+              )}
+            </>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
@@ -109,7 +135,7 @@ const ZenDrawing = () => {
                 max="10"
                 value={strokeWidth}
                 onChange={(e) => setStrokeWidth(Number(e.target.value))}
-                className="w-16"
+                className={isExpanded ? "w-24" : "w-16"}
               />
             </div>
           </div>
@@ -119,7 +145,7 @@ const ZenDrawing = () => {
               <div
                 key={color}
                 onClick={() => setStrokeColor(color)}
-                className={`w-6 h-6 rounded-full cursor-pointer border-2 transition-all ${
+                className={`${isExpanded ? 'w-8 h-8' : 'w-6 h-6'} rounded-full cursor-pointer border-2 transition-all ${
                   strokeColor === color ? 'border-slate-800 scale-110' : 'border-white'
                 }`}
                 style={{ backgroundColor: color }}
@@ -131,8 +157,8 @@ const ZenDrawing = () => {
         <div className="border-2 border-slate-200 rounded-lg overflow-hidden">
           <canvas
             ref={canvasRef}
-            width={300}
-            height={200}
+            width={isExpanded ? 600 : 300}
+            height={isExpanded ? 400 : 200}
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
@@ -146,7 +172,7 @@ const ZenDrawing = () => {
           <Button
             onClick={clearCanvas}
             variant="outline"
-            size="sm"
+            size={isExpanded ? "default" : "sm"}
             className="flex items-center gap-1"
           >
             <RotateCcw className="h-3 w-3" />
@@ -155,7 +181,7 @@ const ZenDrawing = () => {
           <Button
             onClick={downloadDrawing}
             variant="outline"
-            size="sm"
+            size={isExpanded ? "default" : "sm"}
             className="flex items-center gap-1"
           >
             <Download className="h-3 w-3" />
@@ -163,7 +189,20 @@ const ZenDrawing = () => {
           </Button>
         </div>
 
-        <div className="text-xs text-slate-500 text-center p-2 bg-white/60 rounded">
+        {isExpanded && (
+          <div className="bg-white/60 rounded-lg p-4 space-y-3">
+            <h4 className="font-semibold text-slate-800">Consejos para tu práctica Zen</h4>
+            <ul className="text-sm text-slate-700 space-y-2">
+              <li>• Respira profundamente mientras dibujas</li>
+              <li>• No te preocupes por la perfección, enfócate en el proceso</li>
+              <li>• Deja que tu mano se mueva libremente</li>
+              <li>• Experimenta con diferentes colores y trazos</li>
+              <li>• Usa este momento para desconectar y relajarte</li>
+            </ul>
+          </div>
+        )}
+
+        <div className={`text-slate-500 text-center p-2 bg-white/60 rounded ${isExpanded ? 'text-sm' : 'text-xs'}`}>
           <p>Dibuja libremente para liberar tensiones y encontrar calma interior</p>
         </div>
       </CardContent>

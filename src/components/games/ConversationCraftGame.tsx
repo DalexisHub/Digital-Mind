@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -71,6 +70,66 @@ const ConversationCraftGame = ({ isExpanded, onToggleExpand }: { isExpanded: boo
         { id: 'C', text: 'No estoy seguro si tengo el tiempo suficiente...', type: 'evasiva' },
         { id: 'D', text: 'Yo me apunto, siempre he querido demostrar mi potencial en nuevas áreas.', type: 'creativa' }
       ]
+    },
+    {
+      id: 3,
+      level: 'Avanzado',
+      type: 'Conflictivo',
+      context: 'Un compañero de trabajo constantemente te interrumpe durante las presentaciones',
+      character: 'Roberto - Colega competitivo, tiende a dominar conversaciones',
+      objective: 'Establecer límites profesionales de manera assertiva',
+      npcDialogue: 'Perdón por interrumpir, pero creo que sería mejor si explicáramos este punto de otra manera...',
+      responses: [
+        { id: 'A', text: 'Aprecio tu input, Roberto. Permíteme terminar este punto y luego podemos discutir tu perspectiva.', type: 'asertiva' },
+        { id: 'B', text: 'Entiendo tu punto de vista. ¿Podrías dejarme completar esta idea para que todos tengan el contexto completo?', type: 'empática' },
+        { id: 'C', text: 'Oh... está bien, puedes continuar tú...', type: 'evasiva' },
+        { id: 'D', text: 'Roberto, valoro tus ideas, pero necesito que me permitas fluir en mi presentación para ser efectivo.', type: 'creativa' }
+      ]
+    },
+    {
+      id: 4,
+      level: 'Avanzado',
+      type: 'Personal',
+      context: 'Tu pareja está molesta porque siente que no pasas suficiente tiempo juntos',
+      character: 'Alex - Tu pareja, se siente desatendida emocionalmente',
+      objective: 'Abordar el conflicto con empatía y buscar soluciones',
+      npcDialogue: 'Siento que siempre estás ocupado/a con trabajo o otras cosas. Ya no pasamos tiempo de calidad juntos como antes.',
+      responses: [
+        { id: 'A', text: 'Tienes razón, he estado muy enfocado en el trabajo. Planifiquemos tiempo específico solo para nosotros.', type: 'asertiva' },
+        { id: 'B', text: 'Me duele saber que te sientes así. No me había dado cuenta del impacto. ¿Cómo podemos mejorar esto juntos?', type: 'empática' },
+        { id: 'C', text: 'Lo siento... es que he tenido mucho trabajo...', type: 'evasiva' },
+        { id: 'D', text: 'Propongo que instituyamos "citas obligatorias" semanales donde el trabajo esté prohibido.', type: 'creativa' }
+      ]
+    },
+    {
+      id: 5,
+      level: 'Experto',
+      type: 'Profesional',
+      context: 'Estás dando una presentación importante a inversores y uno de ellos cuestiona agresivamente tu propuesta',
+      character: 'Sr. Morrison - Inversor experimentado, estilo confrontativo',
+      objective: 'Mantener compostura y defender tu propuesta profesionalmente',
+      npcDialogue: 'Estos números no me convencen para nada. ¿Cómo esperan que invirtamos en algo tan poco realista? Sus proyecciones parecen demasiado optimistas.',
+      responses: [
+        { id: 'A', text: 'Entiendo su preocupación. Permítame mostrarle la metodología detrás de estas proyecciones y los casos de estudio que las respaldan.', type: 'asertiva' },
+        { id: 'B', text: 'Aprecio su perspectiva crítica, Sr. Morrison. Es exactamente este tipo de escrutinio lo que hace nuestras propuestas más sólidas.', type: 'empática' },
+        { id: 'C', text: 'Bueno... quizás podríamos revisar los números nuevamente...', type: 'evasiva' },
+        { id: 'D', text: 'Sr. Morrison, su experiencia es valiosa. ¿Qué escenarios específicos le preocupan más para que podamos abordarlos directamente?', type: 'creativa' }
+      ]
+    },
+    {
+      id: 6,
+      level: 'Experto',
+      type: 'Conflictivo',
+      context: 'En una negociación importante, la otra parte está siendo poco razonable y amenaza con retirarse',
+      character: 'Directora Chen - Negociadora experimentada, conocida por su dureza',
+      objective: 'Mantener la negociación viable sin ceder puntos críticos',
+      npcDialogue: 'Estas condiciones son inaceptables. Si no pueden mejorar sustancialmente su oferta, no veo razón para continuar estas conversaciones.',
+      responses: [
+        { id: 'A', text: 'Respeto su posición, Directora Chen. Antes de que tome esa decisión, exploremos qué elementos específicos considera más problemáticos.', type: 'asertiva' },
+        { id: 'B', text: 'Entiendo que siente que nuestras posiciones están muy alejadas. ¿Podríamos identificar areas donde ambos podríamos ceder?', type: 'empática' },
+        { id: 'C', text: 'No queremos que se retire... ¿qué necesitaría para reconsiderar?', type: 'evasiva' },
+        { id: 'D', text: 'Directora Chen, reconozco que ambos tenemos líneas rojas. ¿Qué tal si exploramos un enfoque completamente diferente?', type: 'creativa' }
+      ]
     }
   ];
 
@@ -90,13 +149,24 @@ const ConversationCraftGame = ({ isExpanded, onToggleExpand }: { isExpanded: boo
     const response = currentScenario.responses.find(r => r.id === responseId);
     if (!response) return;
 
-    // Simular feedback basado en el tipo de respuesta
+    // Simular feedback basado en el tipo de respuesta y nivel
     let feedback: Feedback;
+    const levelMultiplier = {
+      'Básico': 1,
+      'Intermedio': 1.2,
+      'Avanzado': 1.5,
+      'Experto': 2
+    }[currentScenario.level];
     
     switch (response.type) {
       case 'empática':
         feedback = {
-          score: { confidence: 15, empathy: 20, clarity: 12, naturalness: 18 },
+          score: { 
+            confidence: Math.floor(15 * levelMultiplier), 
+            empathy: Math.floor(20 * levelMultiplier), 
+            clarity: Math.floor(12 * levelMultiplier), 
+            naturalness: Math.floor(18 * levelMultiplier) 
+          },
           analysis: 'Excelente muestra de empatía. Tu respuesta demuestra consideración hacia la otra persona.',
           improvement: 'Podrías ser un poco más asertivo para establecer límites claros.',
           tip: 'La empatía crea conexiones genuinas, pero equilibra con tus propias necesidades.'
@@ -104,7 +174,12 @@ const ConversationCraftGame = ({ isExpanded, onToggleExpand }: { isExpanded: boo
         break;
       case 'asertiva':
         feedback = {
-          score: { confidence: 20, empathy: 10, clarity: 18, naturalness: 15 },
+          score: { 
+            confidence: Math.floor(20 * levelMultiplier), 
+            empathy: Math.floor(10 * levelMultiplier), 
+            clarity: Math.floor(18 * levelMultiplier), 
+            naturalness: Math.floor(15 * levelMultiplier) 
+          },
           analysis: 'Respuesta clara y directa. Muestra seguridad en ti mismo.',
           improvement: 'Considera agregar más elementos empáticos para suavizar el mensaje.',
           tip: 'La asertividad es clave, pero la diplomacia la hace más efectiva.'
@@ -112,7 +187,12 @@ const ConversationCraftGame = ({ isExpanded, onToggleExpand }: { isExpanded: boo
         break;
       case 'evasiva':
         feedback = {
-          score: { confidence: 5, empathy: 8, clarity: 6, naturalness: 10 },
+          score: { 
+            confidence: Math.floor(5 * levelMultiplier), 
+            empathy: Math.floor(8 * levelMultiplier), 
+            clarity: Math.floor(6 * levelMultiplier), 
+            naturalness: Math.floor(10 * levelMultiplier) 
+          },
           analysis: 'Esta respuesta muestra inseguridad y puede crear confusión.',
           improvement: 'Intenta ser más directo y expresar tu opinión con mayor claridad.',
           tip: 'Recuerda que tu opinión es valiosa. Practica expresarte con más confianza.'
@@ -120,9 +200,14 @@ const ConversationCraftGame = ({ isExpanded, onToggleExpand }: { isExpanded: boo
         break;
       case 'creativa':
         feedback = {
-          score: { confidence: 18, empathy: 15, clarity: 16, naturalness: 22 },
+          score: { 
+            confidence: Math.floor(18 * levelMultiplier), 
+            empathy: Math.floor(15 * levelMultiplier), 
+            clarity: Math.floor(16 * levelMultiplier), 
+            naturalness: Math.floor(22 * levelMultiplier) 
+          },
           analysis: 'Respuesta original que alivia la tensión y muestra personalidad.',
-          improvement: 'Asegúrate de que el humor sea apropiado para el contexto.',
+          improvement: 'Asegúrate de que el tono sea apropiado para el contexto.',
           tip: 'La creatividad puede ser un gran rompehielos, úsala sabiamente.'
         };
         break;
@@ -298,28 +383,28 @@ const ConversationCraftGame = ({ isExpanded, onToggleExpand }: { isExpanded: boo
                         <span>Confianza</span>
                         <span>+{lastFeedback.score.confidence}</span>
                       </div>
-                      <Progress value={(lastFeedback.score.confidence / 20) * 100} className="h-2" />
+                      <Progress value={(lastFeedback.score.confidence / 40) * 100} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm">
                         <span>Empatía</span>
                         <span>+{lastFeedback.score.empathy}</span>
                       </div>
-                      <Progress value={(lastFeedback.score.empathy / 20) * 100} className="h-2" />
+                      <Progress value={(lastFeedback.score.empathy / 40) * 100} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm">
                         <span>Claridad</span>
                         <span>+{lastFeedback.score.clarity}</span>
                       </div>
-                      <Progress value={(lastFeedback.score.clarity / 20) * 100} className="h-2" />
+                      <Progress value={(lastFeedback.score.clarity / 40) * 100} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm">
                         <span>Naturalidad</span>
                         <span>+{lastFeedback.score.naturalness}</span>
                       </div>
-                      <Progress value={(lastFeedback.score.naturalness / 20) * 100} className="h-2" />
+                      <Progress value={(lastFeedback.score.naturalness / 40) * 100} className="h-2" />
                     </div>
                   </div>
 

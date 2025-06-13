@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, Volume2, Heart, Waves, Gamepad2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -295,7 +294,10 @@ const Relaxation = () => {
 
           <TabsContent value="games" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <BreathingGame />
+              <BreathingGame 
+                isExpanded={expandedGame === 'breathing'} 
+                onToggleExpand={() => toggleGameExpansion('breathing')} 
+              />
               <SuperBetterGame 
                 isExpanded={expandedGame === 'superbetter'} 
                 onToggleExpand={() => toggleGameExpansion('superbetter')} 
@@ -304,7 +306,10 @@ const Relaxation = () => {
                 isExpanded={expandedGame === 'conversation'} 
                 onToggleExpand={() => toggleGameExpansion('conversation')} 
               />
-              <ZenDrawing />
+              <ZenDrawing 
+                isExpanded={expandedGame === 'zendrawing'} 
+                onToggleExpand={() => toggleGameExpansion('zendrawing')} 
+              />
             </div>
           </TabsContent>
         </Tabs>
